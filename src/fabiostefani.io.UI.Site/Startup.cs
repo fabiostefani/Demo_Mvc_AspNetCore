@@ -27,18 +27,12 @@ namespace fabiostefani.io.UI.Site
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(routes =>
             {
                 routes.MapControllerRoute( "default", "{controller=home}/{action=index}/{id?}");
-            });
-            // app.UseEndpoints(endpoints =>
-            // {
-            //     endpoints.MapGet("/", async context =>
-            //     {
-            //         await context.Response.WriteAsync("Hello World!");
-            //     });
-            // });
+            });            
         }
     }
 }
