@@ -1,3 +1,4 @@
+using fabiostefani.io.UI.Site.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fabiostefani.io.UI.Site.Data
@@ -9,5 +10,7 @@ namespace fabiostefani.io.UI.Site.Data
         {
             
         }
+
+        public DbSet<Aluno> Alunos { get; set; }
     }
 }
