@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using fabiostefani.io.App.ViewModels;
 
 namespace fabiostefani.io.App.Data
 {
@@ -12,5 +10,6 @@ namespace fabiostefani.io.App.Data
             : base(options)
         {
         }
+        public DbSet<fabiostefani.io.App.ViewModels.ProdutoViewModel> ProdutoViewModel { get; set; }
     }
 }
