@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using fabiostefani.io.App.Extensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +29,7 @@ namespace fabiostefani.io.App.ViewModels
         public IFormFile ImagemUpload { get; set; }
         public string Imagem { get; set; }
 
-        //[Moeda]
+        [Moeda]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public decimal Valor { get; set; }
 
