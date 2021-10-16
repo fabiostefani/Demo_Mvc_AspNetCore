@@ -12,16 +12,18 @@ namespace fabiostefani.io.App.Controllers
     public class FornecedoresController : BaseController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
-        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
+        private readonly IFornecedorService _fornecedorService;
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository,
-                                      IEnderecoRepository enderecoRepository,
-                                      IMapper mapper)
+                                      IMapper mapper,
+                                      IFornecedorService fornecedorService,
+                                      INotificador notificador)
+            : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
-            _enderecoRepository = enderecoRepository;
             _mapper = mapper;
+            _fornecedorService = fornecedorService;
         }
 
         [Route("lista-de-fornecedores")]
@@ -54,7 +56,8 @@ namespace fabiostefani.io.App.Controllers
         {
             if (!ModelState.IsValid) return View(fornecedorViewModel);
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
-            await _fornecedorRepository.Adicionar(fornecedor);
+            await _fornecedorService.Adicionar(fornecedor);
+            if (!OperacaoValida()) return View(fornecedorViewModel);
             return RedirectToAction("Index");
         }
         [Route("editar-fornecedor/{id:guid}")]
@@ -73,7 +76,8 @@ namespace fabiostefani.io.App.Controllers
             if (id != fornecedorViewModel.Id) return NotFound();
             if (!ModelState.IsValid) return View(fornecedorViewModel);
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
-            await _fornecedorRepository.Atualizar(fornecedor);
+            await _fornecedorService.Atualizar(fornecedor);
+            if (!OperacaoValida()) return View(await ObterFornecedorProdutosEndereco(id));
             return RedirectToAction("Index");
         }
         [Route("excluir-fornecedor/{id:guid}")]
@@ -89,9 +93,10 @@ namespace fabiostefani.io.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var fornecedorViewModel = await ObterFornecedorEndereco(id);
-            if (fornecedorViewModel == null) return NotFound();
-            await _fornecedorRepository.Remover(id);
+            var fornecedor = await ObterFornecedorEndereco(id);
+            if (fornecedor == null) return NotFound();
+            await _fornecedorService.Remover(id);
+            if (!OperacaoValida()) return View(fornecedor);
             return RedirectToAction(nameof(Index));
         }
 
@@ -120,8 +125,8 @@ namespace fabiostefani.io.App.Controllers
             ModelState.Remove("Nome");
             ModelState.Remove("Documento");
             if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", fornecedorViewModel);
-            await _enderecoRepository.Atualizar(_mapper.Map<Endereco>(fornecedorViewModel.Endereco));
-            //if (!OperacaoValida()) return PartialView("_AtualizarEndereco", fornecedorViewModel);
+            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(fornecedorViewModel.Endereco));
+            if (!OperacaoValida()) return PartialView("_AtualizarEndereco", fornecedorViewModel);
             var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedorViewModel.Endereco.FornecedorId });
             return Json(new { success = true, url });
         }

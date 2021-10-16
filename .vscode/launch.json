@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/fabiostefani.io.UI.Site/bin/Debug/net5.0/fabiostefani.io.UI.Site.dll",
+            "program": "${workspaceFolder}/src/fabiostefani.io.UI.Site/bin/Debug/net5.0/fabiostefani.io.App.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/fabiostefani.io.UI.Site",
+            "cwd": "${workspaceFolder}/src/fabiostefani.io.App",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
