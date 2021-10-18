@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace fabiostefani.io.App.Controllers
 {
+    //[Authorize]
     public class ProdutosController : BaseController
     {
         private readonly IProdutoRepository _produtoRepository;
@@ -31,12 +32,14 @@ namespace fabiostefani.io.App.Controllers
             _produtoService = produtoService;
         }
 
+        //[AllowAnonymous]
         [Route("lista-de-produtos")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores()));
         }
 
+        //[AllowAnonymous]
         [Route("dados-do-produto/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -44,6 +47,8 @@ namespace fabiostefani.io.App.Controllers
             if (produtoViewModel == null) return NotFound();
             return View(produtoViewModel);
         }
+
+        //[ClaimsAuthorize("Produto", "Adicionar")]
         [Route("novo-produto")]
         public async Task<IActionResult> Create()
         {
@@ -51,6 +56,7 @@ namespace fabiostefani.io.App.Controllers
             return View(produtoViewModel);
         }
 
+        //[ClaimsAuthorize("Produto", "Adicionar")]
         [HttpPost]
         [Route("novo-produto")]
         [ValidateAntiForgeryToken]
